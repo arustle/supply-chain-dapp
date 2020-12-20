@@ -12,6 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "lite-server": "2.4.0",
-    "openzeppelin-solidity": "^3.3.0"
+    "openzeppelin-solidity": "^3.3.0",
+    "truffle-hdwallet-provider": "^1.0.17"
   }
 }
