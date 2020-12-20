@@ -170,7 +170,10 @@ App = {
                 break;
         }
     },
+    renderJson: function (htmlId, json) {
 
+        $("#" + htmlId).html('<pre>' + JSON.stringify(json, null, 4) + '</pre>');
+    },
     upload: async function (e) {
         let formData = new FormData();
         const fileInput = document.getElementById('fileUploader');
@@ -213,7 +216,7 @@ App = {
                 App.pictureHash
             );
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('harvest-response', result);
             console.log('harvestItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -227,7 +230,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.processItem(App.upc, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('process-response', result);
             console.log('processItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -241,7 +244,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.packItem(App.upc, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('pack-response', result);
             console.log('packItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -253,11 +256,11 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function (instance) {
-            const productPrice = web3.toWei(1, "ether");
+            const productPrice = web3.toWei(App.productPrice, "ether");
             console.log('productPrice', productPrice);
             return instance.sellItem(App.upc, App.productPrice, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('forsale-response', result);
             console.log('sellItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -269,10 +272,10 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function (instance) {
-            const walletValue = web3.toWei(3, "ether");
+            const walletValue = web3.toWei(0.002, "ether");
             return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('buy-response', result);
             console.log('buyItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -286,7 +289,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.shipItem(App.upc, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('ship-response', result);
             console.log('shipItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -300,7 +303,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.receiveItem(App.upc, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('receive-response', result);
             console.log('receiveItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -314,7 +317,7 @@ App = {
         App.contracts.SupplyChain.deployed().then(function (instance) {
             return instance.purchaseItem(App.upc, {from: App.metamaskAccountID});
         }).then(function (result) {
-            $("#ftc-item").text(result);
+            App.renderJson('purchase-response', result);
             console.log('purchaseItem', result);
         }).catch(function (err) {
             console.log(err.message);
@@ -342,17 +345,17 @@ App = {
                 originFarmLatitude: result[6],
                 originFarmLongitude: result[7],
             }
-            $("#ftc-item").html('<pre>' + JSON.stringify(data, null, 4) + '</pre>');
+            App.renderJson('fetchOne-response', data);
             console.log('fetchItemBufferOne', result);
 
-            $("#sku").val(data.sku);
-            // $("#upc").val(data.upc);
-            $("#ownerID").val(data.ownerID);
-            $("#originFarmerID").val(data.originFarmerID);
-            $("#originFarmName").val(data.originFarmName);
-            $("#originFarmInformation").val(data.originFarmInformation);
-            $("#originFarmLatitude").val(data.originFarmLatitude);
-            $("#originFarmLongitude").val(data.originFarmLongitude);
+            // $("#sku").val(data.sku);
+            // // $("#upc").val(data.upc);
+            // $("#ownerID").val(data.ownerID);
+            // $("#originFarmerID").val(data.originFarmerID);
+            // $("#originFarmName").val(data.originFarmName);
+            // $("#originFarmInformation").val(data.originFarmInformation);
+            // $("#originFarmLatitude").val(data.originFarmLatitude);
+            // $("#originFarmLongitude").val(data.originFarmLongitude);
 
             $("#productPictures").append(
                 $('<img src="https://gateway.ipfs.io/ipfs/' + result[8] + '" style="max-width: 800px;" />')
@@ -382,15 +385,15 @@ App = {
                 retailerID: result[7],
                 consumerID: result[8],
             }
-            $("#ftc-item").html('<pre>' + JSON.stringify(data, null, 4) + '</pre>');
+            App.renderJson('fetchTwo-response', data);
             console.log('fetchItemBufferTwo', result);
 
 
-            $("#productNotes").val(data.productNotes);
-            $("#productPrice").val(data.productID);
-            $("#distributorID").val(data.distributorID);
-            $("#retailerID").val(data.retailerID);
-            $("#consumerID").val(data.consumerID);
+            // $("#productNotes").val(data.productNotes);
+            // $("#productPrice").val(data.productID);
+            // $("#distributorID").val(data.distributorID);
+            // $("#retailerID").val(data.retailerID);
+            // $("#consumerID").val(data.consumerID);
 
 
         }).catch(function (err) {
